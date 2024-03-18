@@ -1,17 +1,16 @@
-import { useState, useEffect, useCallback } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { getEditContact } from "../../redux/contactsSlice/contacts-selectors";
+import { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { getEditContact } from '../../redux/contactsSlice/contacts-selectors';
 import {
   addContactThunk,
-  getContactsThunk,
   updateContactThunk,
-} from "../../redux/contactsSlice/thunk";
-import styles from "./ContactForm.module.css";
+} from '../../redux/contactsSlice/thunk';
+import styles from './ContactForm.module.css';
 
 const initialState = {
-  name: "",
-  phone: "",
-  id: "",
+  name: '',
+  phone: '',
+  id: '',
 };
 
 const ContactForm = () => {
@@ -19,43 +18,33 @@ const ContactForm = () => {
   const dispatch = useDispatch();
 
   const contact = useSelector(getEditContact);
-
-  const userName = contact?.name;
+  const isEdit = !!contact;
 
   useEffect(() => {
-    const editContact = () => {
-      setState({ ...contact });
-    };
-
-    editContact();
+    if (contact) setState(contact);
   }, [contact]);
 
   const handleInputChange = ({ target: { name, value } }) => {
-    setState((prev) => ({ ...prev, [name]: value }));
+    setState(prev => ({ ...prev, [name]: value }));
   };
 
-  const handlerSubmitContactFrom = useCallback(
-    (e) => {
-      e.preventDefault();
-      const { name, phone, id } = state;
+  const handlerSubmitContactFrom = e => {
+    e.preventDefault();
+    const { name, phone } = state;
 
-      if (!name || !phone) return;
+    if (!name || !phone) return;
 
-      !!id
-        ? dispatch(updateContactThunk(state))
-        : dispatch(addContactThunk(state));
+    isEdit
+      ? dispatch(updateContactThunk(state))
+      : dispatch(addContactThunk(state));
 
-      setState({ ...initialState });
-      dispatch(getContactsThunk());
-    },
-
-    [state, dispatch]
-  );
+    setState({ ...initialState });
+  };
 
   return (
     <div className={styles.wrap}>
       <h2 className={styles.title}>
-        {userName ? "Edit contact" : "Create contact"}
+        {isEdit ? 'Edit contact' : 'Create contact'}
       </h2>
       <form className={styles.form} onSubmit={handlerSubmitContactFrom}>
         <div className={styles.wrapLabel}>
@@ -83,7 +72,7 @@ const ContactForm = () => {
           </label>
         </div>
         <button type="submit" className={styles.button}>
-          {userName ? "Edit contact" : "Add contact"}
+          {isEdit ? 'Edit contact' : 'Add contact'}
         </button>
       </form>
     </div>

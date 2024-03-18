@@ -1,12 +1,12 @@
-import React from "react";
-import { useDispatch, useSelector } from "react-redux";
-import styles from "../Contacts.module.css";
-import { getFindEditContact } from "../../../redux/contactsSlice/contacts-selectors";
-import { editContact } from "../../../redux/editContact/editContactSlice";
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import styles from '../Contacts.module.css';
+import { getFindEditContact } from '../../../redux/contactsSlice/contacts-selectors';
+import { editContact } from '../../../redux/contactsSlice/contactsSlice';
 
 const EditButton = ({ id }) => {
   const dispatch = useDispatch();
-  const contact = useSelector((state) => getFindEditContact(state, id));
+  const contact = useSelector(state => getFindEditContact(state, id));
 
   const findEditContact = () => {
     dispatch(editContact(contact));
@@ -14,8 +14,8 @@ const EditButton = ({ id }) => {
 
   return (
     <button
-      type='button'
-      className={styles.button + " " + styles.buttonEdit}
+      type="button"
+      className={styles.button + ' ' + styles.buttonEdit}
       onClick={findEditContact}
     >
       Edit
